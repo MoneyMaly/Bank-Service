@@ -24,3 +24,7 @@ class BankAccountBalance(BaseModel):
     year: int
     month: int
     expenses_and_revenues: list
+
+class ExpenceorRevenue(BaseModel):
+    price: str
+    subject:str 

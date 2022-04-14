@@ -10,17 +10,17 @@ async def get_bank_accounts_list_by_username(username: str):
     bank_accounts = await db["UsersBankAccounts"].find({"username":username}).to_list(length=5)
     return list(bank_accounts)
 
-# def get_monthly_balance(bank_accounts_list, year, month):
-#     accounts_monthly_balance_list = []
-#     for bank_account in bank_accounts_list:
-#         account_monthly_balance = db["BankAccounts"].find_one({"owner": bank_account.owner, \
-#         "ssn": bank_account.ssn, "account_number":bank_account.account_number, "year": year, "month": month})
-#         try:
-#             for transaction in account_monthly_balance['expenses_and_revenues']:
-#                 accounts_monthly_balance_list.append(transaction)
-#         except Exception:
-#             pass
-#     return accounts_monthly_balance_list
+async def get_monthly_balance(bank_accounts_list, year: int, month: int):
+    accounts_monthly_balance_list = []
+    for bank_account in bank_accounts_list:
+        account_monthly_balance = await db["BankAccounts"].find_one({"owner": bank_account["owner"], \
+        "ssn": bank_account["ssn"], "account_number":bank_account["account_number"], "year": year, "month": month})
+        try:
+            for transaction in account_monthly_balance['expenses_and_revenues']:
+                accounts_monthly_balance_list.append(transaction)
+        except Exception:
+            pass
+    return accounts_monthly_balance_list
 
 
 
