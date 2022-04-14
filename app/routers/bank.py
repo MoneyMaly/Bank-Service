@@ -1,9 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.adapters.db_adapter import get_bank_accounts_list_by_username, get_monthly_balance
 from app.utils.auth_helper import get_current_user
+from app.models.bankaccountmodel import BankAccountByUsername
 
 router = APIRouter()
 
@@ -13,12 +14,12 @@ credentials_exception = HTTPException(
     headers={"WWW-Authenticate": "Bearer"})
 
 
-@router.get("/users/{username}/bankaccounts/")
+@router.get("/users/{username}/bankaccounts/",status_code=status.HTTP_200_OK,response_model=List[BankAccountByUsername], response_model_exclude=['_id'])
 async def get_bank_accounts_list(authenticated_username: str = Depends(get_current_user), username=None):
     if authenticated_username != username:
         raise credentials_exception
-    bank_accounts_list = get_bank_accounts_list_by_username(username)
-    return [{"owner": username, "accounts_list": bank_accounts_list}]
+    bank_accounts_list = await get_bank_accounts_list_by_username(username)
+    return bank_accounts_list
 
 @router.get("/users/{username}/bankaccounts/balance/")
 async def get_monthly_balance_by_user(authenticated_username: str = Depends(get_current_user), username=None, month: Optional[int] = 1, year: Optional[int] = 2020):

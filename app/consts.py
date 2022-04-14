@@ -1,3 +1,1 @@
-TOKEN_SECTION = 'Token' 
-BANK_SECTION = 'Bank' 
-DEFAULT_PREFIX = '/api' 
+TOKEN_SECTION = 'Token'

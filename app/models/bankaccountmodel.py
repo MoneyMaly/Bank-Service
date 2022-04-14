@@ -4,11 +4,10 @@ from app.utils.db_helper import PyObjectId
 
 
 class BankAccountByUsername(BaseModel):
-    id: Optional[PyObjectId] = Field(alias='_id')
-    username: str
-    ssn: str
-    owner: str
-    account_number:str
+    username: Optional[str] = None
+    owner: Optional[str] = None
+    ssn: Optional[str] = None
+    account_number: Optional[str] = None
 
 class BankAccountBalance(BaseModel):
     id: Optional[PyObjectId] = Field(alias='_id')

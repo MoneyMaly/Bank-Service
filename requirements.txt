@@ -9,3 +9,5 @@ one
 bcrypt
 cryptography
 python-jose
+motor==2.0.0
+starlette
