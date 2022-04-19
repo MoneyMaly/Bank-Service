@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from fastapi import APIRouter, HTTPException, status, Depends
 
-from app.adapters.db_adapter import get_bank_accounts_list_by_username, get_monthly_balance, create_user_bank_account
+from app.adapters.db_adapter import get_bank_accounts_list_by_username, get_account_monthly_balance, create_user_bank_account
 from app.utils.auth_helper import JWTBearer
 from app.models import BankAccountByUsername, BankAccountBalance, ExpenceorRevenue
 
@@ -34,8 +34,13 @@ async def get_monthly_balance_by_user(username: str, month: Optional[int] = 1, y
     if JWTBearer.authenticated_username != username:
         raise credentials_exception
     bank_accounts_list = await get_bank_accounts_list_by_username(username)
-    monthly_balance = await get_monthly_balance(bank_accounts_list, year, month)
-    return monthly_balance
+    total_monthly_balance_list = []
+    for bank_account in bank_accounts_list:
+        account_monthly_balance = await get_account_monthly_balance(bank_account, year, month)
+        if account_monthly_balance is not None:
+            for transaction in account_monthly_balance['expenses_and_revenues']:
+                total_monthly_balance_list.append(transaction)
+    return total_monthly_balance_list
 #     monthly_balance = get_monthly_balance(bank_accounts_list, year, month)
 #     return [{"owner": username, "year": year, "month": month, "monthly_balance": monthly_balance}]
 
