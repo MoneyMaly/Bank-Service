@@ -11,7 +11,7 @@ class TokenData(BaseModel):
     username: Optional[str] = None
     role: Optional[str] = None
 
-class BankAccountByUsername(BaseModel):
+class UsersBankAccount(BaseModel):
     username: Optional[str] = None
     owner: Optional[str] = None
     ssn: Optional[str] = None
