@@ -25,7 +25,7 @@ async def delete_user_bank_account(username: str, account_number: str):
 async def get_users_account(username: str, account_number: str):
     users_account = await db["UsersBankAccounts"].find_one({"username": username, "account_number": account_number})
     return users_account
-    
+
 # BankAccounts   
 async def get_account_monthly_balance(bank_account, year: int, month: int):
     account_monthly_balance = await db["BankAccounts"].find_one({"owner": bank_account["owner"], \
@@ -38,7 +38,8 @@ async def get_account_monthly_balance_by_number(username: str, account_number: s
 # UsersDeals
 async def insert_users_deal(users_deal: UsersDeal):
     try:
-        res = await db["UsersDeals"].insert_one(users_deal.__dict__)
+        res = await db["UsersDeals"].update_one({"username": users_deal.username, "account_number": users_deal.account_number},
+        {"$set":users_deal.__dict__},upsert=True)
         return True
     except:
         return False
