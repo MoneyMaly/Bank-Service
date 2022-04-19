@@ -14,21 +14,21 @@ credentials_exception = HTTPException(
     headers={"WWW-Authenticate": "Bearer"})
 
 
-@router.get("/users/{username}/bankaccounts/",status_code=status.HTTP_200_OK, response_model=List[UserBankAccount], dependencies=[Depends(JWTBearer())])
+@router.get("/users/{username}/bankaccounts",status_code=status.HTTP_200_OK, response_model=List[UserBankAccount], dependencies=[Depends(JWTBearer())])
 async def get_bank_accounts_list(username: str):
     if JWTBearer.authenticated_username != username:
         raise credentials_exception
     bank_accounts_list = await get_bank_accounts_list_by_username(username)
     return bank_accounts_list
 
-@router.post("/users/{username}/bankaccounts/",status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
+@router.post("/users/{username}/bankaccounts",status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
 async def add_bank_accounts_list(bank_account: UserBankAccount):
     if JWTBearer.authenticated_username != bank_account.username:
         raise credentials_exception
     success = await create_user_bank_account(bank_account)
     return success
 
-@router.delete("/users/{username}/bankaccounts/{account_number}/",status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
+@router.delete("/users/{username}/bankaccounts/{account_number}",status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
 async def remove_user_bank_account(username: str, account_number: str):
     if JWTBearer.authenticated_username != username:
         raise credentials_exception

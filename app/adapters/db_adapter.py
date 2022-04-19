@@ -32,8 +32,8 @@ async def get_account_monthly_balance(bank_account, year: int, month: int):
     "ssn": bank_account["ssn"], "account_number":bank_account["account_number"], "year": year, "month": month})
     return account_monthly_balance
 
-async def get_account_monthly_balance_by_number(username: str, account_number: str, year: int, month: int):
-    account_monthly_balance = await db["BankAccounts"].find_one({"username": username, "account_number": account_number, "year": year, "month": month})
+async def get_account_monthly_balance_by_number(account_number: str,year : int, month: int):
+    account_monthly_balance = await db["BankAccounts"].find_one({"account_number": account_number, "year": year, "month": month})
     return account_monthly_balance
 # UsersDeals
 async def upsert_user_deal(user_deal: UserDeal):

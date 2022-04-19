@@ -6,7 +6,7 @@ from app.adapters.db_adapter import upsert_user_deal, get_user_account, get_user
 from app.utils.auth_helper import JWTBearer
 from app.models import ExpenceorRevenue, Deal, UserDeal
 
-router = APIRouter(tags=['Users deals'])
+router = APIRouter(tags=['Users Deals'])
 
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,

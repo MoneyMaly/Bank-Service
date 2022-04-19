@@ -37,4 +37,9 @@ class Deal(BaseModel):
 
 class UserDeal(Deal):
     username: str
-    account_number: str 
+    account_number: str
+class CompanyMonthlyPrice(BaseModel):
+    company: str
+    price: int
+    year: int
+    month: int 
