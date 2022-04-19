@@ -27,4 +27,14 @@ class BankAccountBalance(BaseModel):
 
 class ExpenceorRevenue(BaseModel):
     price: str
-    subject:str 
+    subject:str
+
+class Deal(BaseModel):
+    company: str
+    # can be Communication, TV, insurance
+    sector: str
+    extra_info: dict
+
+class UsersDeal(Deal):
+    username: str
+    account_number: str 

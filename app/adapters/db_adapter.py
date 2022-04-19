@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from uuid import uuid4
 
-from app.models import BankAccountBalance, UsersBankAccount
+from app.models import BankAccountBalance, UsersBankAccount, UsersDeal
 from app.settings import DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_PORT, DATABASE_NAME
 
 client = None
@@ -12,8 +12,11 @@ async def get_bank_accounts_list_by_username(username: str):
     return list(bank_accounts)
 
 async def create_user_bank_account(bank_account: UsersBankAccount):
-    bank_accounts = await db["UsersBankAccounts"].insert_one(bank_account.__dict__)
-    return True
+    try:
+        res = await db["UsersBankAccounts"].insert_one(bank_account.__dict__)
+        return True
+    except:
+        return False
 
 async def delete_user_bank_account(username: str, account_number: str):
     res = await db["UsersBankAccounts"].delete_one({"username": username, "account_number": account_number})
@@ -28,4 +31,9 @@ async def get_account_monthly_balance_by_number(username: str, account_number: s
     account_monthly_balance = await db["BankAccounts"].find_one({"username": username, "account_number": account_number, "year": year, "month": month})
     return account_monthly_balance
 
-
+async def insert_users_deal(users_deal: UsersDeal):
+    try:
+        res = await db["UsersDeals"].insert_one(users_deal.__dict__)
+        return True
+    except:
+        return False

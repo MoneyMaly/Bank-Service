@@ -2,32 +2,16 @@ from typing import Optional, List
 
 from fastapi import APIRouter, HTTPException, status, Depends
 
-from app.adapters.db_adapter import get_bank_accounts_list_by_username, get_account_monthly_balance, create_user_bank_account, \
-get_account_monthly_balance_by_number, delete_user_bank_account
+from app.adapters.db_adapter import get_bank_accounts_list_by_username, get_account_monthly_balance
 from app.utils.auth_helper import JWTBearer
 from app.models import UsersBankAccount, BankAccountBalance, ExpenceorRevenue
 
-router = APIRouter(tags=['Bank'])
+router = APIRouter(tags=['Banking Service'])
 
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Could not validate credentials",
     headers={"WWW-Authenticate": "Bearer"})
-
-@router.get("/users/{username}/bankaccounts/",status_code=status.HTTP_200_OK,response_model=List[UsersBankAccount], 
-response_model_exclude=['_id'], dependencies=[Depends(JWTBearer())])
-async def get_bank_accounts_list(username: str):
-    if JWTBearer.authenticated_username != username:
-        raise credentials_exception
-    bank_accounts_list = await get_bank_accounts_list_by_username(username)
-    return bank_accounts_list
-
-@router.post("/users/{username}/bankaccounts/",status_code=status.HTTP_200_OK, response_model_exclude=['_id'], dependencies=[Depends(JWTBearer())])
-async def get_bank_accounts_list(bank_account: UsersBankAccount):
-    if JWTBearer.authenticated_username != bank_account.username:
-        raise credentials_exception
-    bank_accounts_list = await create_user_bank_account(bank_account)
-    return bank_accounts_list
 
 @router.get("/users/{username}/bankaccounts/balance/",status_code=status.HTTP_200_OK,response_model=List[ExpenceorRevenue], response_model_exclude=['id'], dependencies=[Depends(JWTBearer())])
 async def get_user_monthly_balance(username: str, month: Optional[int] = 1, year: Optional[int] = 2022):
@@ -53,10 +37,3 @@ async def get_account_monthly_balance_by_user(username: str, account_number: str
     if bank_account is not None:
         return bank_account['expenses_and_revenues']
     return []
-
-@router.delete("/users/{username}/bankaccounts/{account_number}/",status_code=status.HTTP_200_OK, response_model_exclude=['id'], dependencies=[Depends(JWTBearer())])
-async def remove_users_bank_account(username: str, account_number: str):
-    if JWTBearer.authenticated_username != username:
-        raise credentials_exception
-    deleted_count = await delete_user_bank_account(username, account_number)
-    return f"{deleted_count} accounts successfully removed"
