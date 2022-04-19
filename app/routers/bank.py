@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.adapters.db_adapter import get_bank_accounts_list_by_username, get_account_monthly_balance
 from app.utils.auth_helper import JWTBearer
-from app.models import UsersBankAccount, BankAccountBalance, ExpenceorRevenue
+from app.models import UserBankAccount, BankAccountBalance, ExpenceorRevenue
 
 router = APIRouter(tags=['Banking Service'])
 
@@ -29,11 +29,24 @@ async def get_user_monthly_balance(username: str, month: Optional[int] = 1, year
 async def get_account_monthly_balance_by_user(username: str, account_number: str, ssn: str, owner: str, month: Optional[int] = 1, year: Optional[int] = 2022):
     if JWTBearer.authenticated_username != username:
         raise credentials_exception
-    users_bank_account = {}
+    user_bank_account = {}
     bank_account_properties = ["username","account_number","ssn","owner"]
     for prop in bank_account_properties:
-        users_bank_account[prop] = eval(prop)
-    bank_account = await  get_account_monthly_balance(users_bank_account, year, month)
+        user_bank_account[prop] = eval(prop)
+    bank_account = await  get_account_monthly_balance(user_bank_account, year, month)
     if bank_account is not None:
         return bank_account['expenses_and_revenues']
     return []
+
+# @router.get("/users/{username}/bankaccounts/{account_number}/company/{company}",status_code=status.HTTP_200_OK,response_model=List[ExpenceorRevenue], response_model_exclude=['id'], dependencies=[Depends(JWTBearer())])
+# async def get_account_monthly_balance_by_user(username: str, account_number: str, company: str, ssn: str, owner: str, month: Optional[int] = 1, year: Optional[int] = 2020):
+#     if JWTBearer.authenticated_username != username:
+#         raise credentials_exception
+#     users_bank_account = {}
+#     bank_account_properties = ["username","account_number","ssn","owner"]
+#     for prop in bank_account_properties:
+#         users_bank_account[prop] = eval(prop)
+#     bank_account = await  get_account_monthly_balance(users_bank_account, year, month)
+#     if bank_account is not None:
+#         return bank_account['expenses_and_revenues']
+#     return []

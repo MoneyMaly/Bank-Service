@@ -11,7 +11,7 @@ class TokenData(BaseModel):
     username: Optional[str] = None
     role: Optional[str] = None
 
-class UsersBankAccount(BaseModel):
+class UserBankAccount(BaseModel):
     username: Optional[str] = None
     owner: Optional[str] = None
     ssn: Optional[str] = None
@@ -35,6 +35,6 @@ class Deal(BaseModel):
     sector: str
     extra_info: dict
 
-class UsersDeal(Deal):
+class UserDeal(Deal):
     username: str
     account_number: str 
