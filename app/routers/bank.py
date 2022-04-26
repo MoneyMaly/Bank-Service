@@ -44,12 +44,12 @@ async def get_company_monthly_price(username: str, account_number: str, company:
         raise credentials_exception
     company_payment = {}
     monthly_balance = await get_account_monthly_balance_by_number(account_number, year, month)
-    company_pay = next((pay for pay in monthly_balance['expenses_and_revenues'] if pay['subject'] == company), None)
-    company_payment['company'] = company
-    company_payment['year'] = year
-    company_payment['month'] = month
-    if company_payment:
-        company_payment['price'] = company_pay['price']
-        return company_payment
-    company_payment['price'] = 0
-    return company_payment
+    if monthly_balance:
+        company_pay = next((pay for pay in monthly_balance['expenses_and_revenues'] if pay['subject'] == company), None)
+        company_payment['company'] = company
+        company_payment['year'] = year
+        company_payment['month'] = month
+        if company_payment:
+            company_payment['price'] = company_pay['price']
+            return company_payment
+    return None
