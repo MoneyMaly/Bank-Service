@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, Field
-from app.utils.db_helper import PyObjectId
+from app.utils.db_helper import PyObjectId, ObjectIdStr
 from datetime import datetime
 
 class Token(BaseModel):
@@ -32,11 +32,14 @@ class ExpenceorRevenue(BaseModel):
     date: datetime
 
 class Deal(BaseModel):
+    id: Optional[ObjectIdStr] = Field(alias='_id')
     company: str
     # can be Communication, TV, insurance
     sector: str
     extra_info: dict
 
+class DealDetails(Deal):
+    price : Optional[int] = 0
 class UserDeal(Deal):
     username: str
     account_number: str

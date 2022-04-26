@@ -51,3 +51,7 @@ async def delete_user_deal(username: str, account_number: str, company: str):
 async def get_user_deals_list(username: str, account_number: str):
     user_deals = await db["UsersDeals"].find({"username": username, "account_number": account_number}).to_list(length=10)
     return list(user_deals)
+
+async def get_deals_list(sector : str):
+    user_deals = await db["UsersDeals"].find({"sector": sector}).to_list(length=50)
+    return list(user_deals)

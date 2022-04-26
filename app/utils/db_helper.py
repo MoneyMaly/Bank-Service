@@ -52,3 +52,14 @@ def to_jsonable_dict(obj, classkey=None):
         return data
     else:
         return obj
+
+class ObjectIdStr(str):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v):
+        if not isinstance(v, ObjectId):
+            raise ValueError("Not a valid ObjectId")
+        return str(v)
