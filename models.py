@@ -45,3 +45,4 @@ class CompanyMonthlyPrice(BaseModel):
     price: int
     year: int
     month: int 
+    date: datetime

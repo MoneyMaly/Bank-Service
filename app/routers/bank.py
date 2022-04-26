@@ -50,6 +50,7 @@ async def get_company_monthly_price(username: str, account_number: str, company:
         company_payment['year'] = year
         company_payment['month'] = month
         if company_payment:
+            company_payment['date'] = company_pay['date']
             company_payment['price'] = company_pay['price']
             return company_payment
     return None
