@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field
 from app.utils.db_helper import PyObjectId
+from datetime import datetime
 
 class Token(BaseModel):
     access_token: str
@@ -28,6 +29,7 @@ class BankAccountBalance(BaseModel):
 class ExpenceorRevenue(BaseModel):
     price: str
     subject:str
+    date: datetime
 
 class Deal(BaseModel):
     company: str
