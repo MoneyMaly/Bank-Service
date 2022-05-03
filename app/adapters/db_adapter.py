@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from uuid import uuid4
+from bson import ObjectId
 
 from app.models import BankAccountBalance, UserBankAccount, UserDeal
 from app.settings import DATABASE_SERVER, DATABASE_USER, DATABASE_PASSWORD, DATABASE_PORT, DATABASE_NAME
@@ -55,3 +56,7 @@ async def get_user_deals_list(username: str, account_number: str):
 async def get_deals_list(sector : str):
     user_deals = await db["UsersDeals"].find({"sector": sector}).to_list(length=50)
     return list(user_deals)
+
+async def get_deal_by_id(id : str):
+    deal = await db["UsersDeals"].find_one({"_id": ObjectId(id)})
+    return deal 

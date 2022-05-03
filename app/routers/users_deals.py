@@ -3,7 +3,7 @@ from typing import Optional, List
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, status, Depends
 
-from app.adapters.db_adapter import upsert_user_deal, get_user_account, get_user_deals_list, delete_user_deal, get_deals_list
+from app.adapters.db_adapter import upsert_user_deal, get_user_account, get_user_deals_list, delete_user_deal, get_deals_list, get_deal_by_id
 from app.utils.auth_helper import JWTBearer
 from app.models import ExpenceorRevenue, Deal, UserDeal, DealDetails
 from app.routers.bank import get_company_price
@@ -61,3 +61,10 @@ async def get_deals_full_details_anonymously(sector: str):
             deal['price']= deal_details['price']
             current_list.append(deal)
     return current_list
+
+@router.get("/deals/deal_id/{_id}",status_code=status.HTTP_200_OK, response_model=UserDeal, response_model_exclude=['username', 'account_number'], dependencies=[Depends(JWTBearer())])
+async def get_deal_from_id(id: str):
+    if JWTBearer.role != "business":
+        raise credentials_exception
+    deal = await get_deal_by_id(id)
+    return deal 
