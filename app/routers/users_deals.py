@@ -62,7 +62,7 @@ async def get_deals_full_details_anonymously(sector: str):
             current_list.append(deal)
     return current_list
 
-@router.get("/deals/deal_id/{id}",status_code=status.HTTP_200_OK, response_model=UserDeal, response_model_exclude=['username', 'account_number'], dependencies=[Depends(JWTBearer())])
+@router.get("/deals/deal_id/{id}",status_code=status.HTTP_200_OK, response_model=UserDeal, dependencies=[Depends(JWTBearer())])
 async def get_deal_from_id(id: str):
     if JWTBearer.role != "business":
         raise credentials_exception
