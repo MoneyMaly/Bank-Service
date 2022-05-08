@@ -50,8 +50,6 @@ async def remove_user_deal(username: str, account_number: str, company: str):
 
 @router.get("/deals/sectors/{sector}",status_code=status.HTTP_200_OK, response_model=List[DealDetails], response_model_exclude=['username', 'account_number'], dependencies=[Depends(JWTBearer())])
 async def get_deals_full_details_anonymously(sector: str):
-    if JWTBearer.role != "business":
-        raise credentials_exception
     today = datetime.today()
     deals_list = await get_deals_list(sector)
     current_list = []
