@@ -46,7 +46,7 @@ class UserDeal(Deal):
     account_number: str
 class CompanyMonthlyPrice(BaseModel):
     company: str
+    date: datetime
     price: int
     year: int
     month: int 
-    date: datetime

@@ -11,6 +11,7 @@ db = None
 async def get_bank_accounts_list_by_username(username: str):
     bank_accounts = await db["UsersBankAccounts"].find({"username":username}).to_list(length=5)
     return list(bank_accounts)
+
 # UsersBankAccounts
 async def create_user_bank_account(bank_account: UserBankAccount):
     try:
@@ -36,6 +37,7 @@ async def get_account_monthly_balance(bank_account, year: int, month: int):
 async def get_account_monthly_balance_by_number(account_number: str,year : int, month: int):
     account_monthly_balance = await db["BankAccounts"].find_one({"account_number": account_number, "year": year, "month": month})
     return account_monthly_balance
+
 # UsersDeals
 async def upsert_user_deal(user_deal: UserDeal):
     try:
